@@ -192,7 +192,9 @@
     if (tg) { tg.ready(); tg.expand(); }
 
     const enTelegram = !!(tg && tg.initData && tg.initData.length > 0);
-    const BOT_USERNAME = 'Barber_AssistantBot';
+    
+    // ⚠️ CAMBIA ESTO por la URL de tu webhook de n8n (la de producción, sin -test)
+    const N8N_WEBHOOK_URL = 'https://numerator-algorithm-chain.ngrok-free.dev/webhook/1f87c2c1-54b2-41ec-898c-55d2e5743e28/webhook';
 
     // Rate limiting
     const intentos = [];
@@ -204,7 +206,7 @@
         return true;
     }
 
-    function reservar(btn, servicio) {
+    async function reservar(btn, servicio) {
         if (!rateLimitOk()) {
             showToast('⏳ Demasiados intentos. Espera un momento.', 'error');
             return;
@@ -219,17 +221,27 @@
         btn.classList.add('loading');
 
         try {
-            const datos = JSON.stringify({
+            const datos = {
                 accion: 'reservar',
                 servicio: servicio,
                 initData: tg.initData,
-                user: tg.initDataUnsafe?.user || null
+                user: tg.initDataUnsafe?.user || null,
+                chatId: tg.initDataUnsafe?.user?.id || null
+            };
+
+            // Enviar directamente al webhook de n8n
+            const respuesta = await fetch(N8N_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
             });
 
-            const mensaje = encodeURIComponent(datos);
-            tg.openLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
-            
-            showToast('✅ Pulsa ENTER en el chat para confirmar', 'success');
+            if (respuesta.ok) {
+                showToast('✅ ¡Reserva enviada con éxito!', 'success');
+                setTimeout(() => tg.close(), 1500);
+            } else {
+                throw new Error('Error del servidor');
+            }
 
         } catch (err) {
             console.error('Error:', err);
@@ -241,7 +253,7 @@
 
     // Clic en tarjeta de servicio
     document.querySelectorAll('.service-card').forEach(card => {
-        card.addEventListener('click', function () {
+        card.addEventListener('click', async function () {
             if (!rateLimitOk()) {
                 showToast('⏳ Demasiados intentos. Espera un momento.', 'error');
                 return;
@@ -257,16 +269,28 @@
             }
 
             try {
-                const datos = JSON.stringify({
+                const datos = {
                     accion: 'reservar',
                     servicio: servicio,
                     precio: precio,
                     initData: tg.initData,
-                    user: tg.initDataUnsafe?.user || null
+                    user: tg.initDataUnsafe?.user || null,
+                    chatId: tg.initDataUnsafe?.user?.id || null
+                };
+
+                const respuesta = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
                 });
-                const mensaje = encodeURIComponent(datos);
-                tg.openLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
-                showToast(`💇 ${servicio} — Pulsa ENTER en el chat`, 'success');
+
+                if (respuesta.ok) {
+                    showToast(`💇 ${servicio} — ¡Reservado!`, 'success');
+                    setTimeout(() => tg.close(), 1500);
+                } else {
+                    throw new Error('Error del servidor');
+                }
+
             } catch (err) {
                 showToast('❌ Error al enviar.', 'error');
             }
