@@ -227,7 +227,7 @@
             });
 
             const mensaje = encodeURIComponent(datos);
-            tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
+            tg.openLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
             
             showToast('✅ Pulsa ENTER en el chat para confirmar', 'success');
 
@@ -265,7 +265,7 @@
                     user: tg.initDataUnsafe?.user || null
                 });
                 const mensaje = encodeURIComponent(datos);
-                tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
+                tg.openLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
                 showToast(`💇 ${servicio} — Pulsa ENTER en el chat`, 'success');
             } catch (err) {
                 showToast('❌ Error al enviar.', 'error');
