@@ -225,7 +225,7 @@
                 initData: tg.initData,
                 user: tg.initDataUnsafe?.user || null
             });
-
+            console.log('Abriendo enlace:', `https://t.me/${BOT_USERNAME}?start=${mensaje}`);
             const mensaje = encodeURIComponent(datos);
             tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
             
