@@ -222,15 +222,15 @@
             const datos = JSON.stringify({
                 accion: 'reservar',
                 servicio: servicio,
+                // ✅ Datos firmados por Telegram para validar en n8n
+                initData: tg.initData,
+                user: tg.initDataUnsafe?.user || null
             });
 
-            // Usamos openTelegramLink en lugar de sendData
             const mensaje = encodeURIComponent(datos);
             tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
             
             showToast('✅ ¡Solicitud enviada!', 'success');
-            
-            // Cerrar la Mini App después de un momento
             setTimeout(() => tg.close(), 500);
 
         } catch (err) {
@@ -259,7 +259,14 @@
             }
 
             try {
-                const datos = JSON.stringify({ accion: 'reservar', servicio, precio });
+                const datos = JSON.stringify({
+                    accion: 'reservar',
+                    servicio,
+                    precio,
+                    // ✅ Datos firmados por Telegram para validar en n8n
+                    initData: tg.initData,
+                    user: tg.initDataUnsafe?.user || null
+                });
                 const mensaje = encodeURIComponent(datos);
                 tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
                 showToast(`💇 ${servicio} — ¡Reservando!`, 'success');
