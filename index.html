@@ -192,6 +192,7 @@
     if (tg) { tg.ready(); tg.expand(); }
 
     const enTelegram = !!(tg && tg.initData && tg.initData.length > 0);
+    const BOT_USERNAME = 'Barber_AssistantBot';
 
     // Rate limiting
     const intentos = [];
@@ -210,7 +211,6 @@
         }
 
         if (!enTelegram) {
-            // Fuera de Telegram: mostrar aviso
             showToast('⚠️ Abre esta página desde Telegram', 'error');
             return;
         }
@@ -219,15 +219,17 @@
         btn.classList.add('loading');
 
         try {
-            // Enviamos datos firmados por Telegram directamente al bot
-            // sin fetch, sin CORS, sin secrets visibles
             const datos = JSON.stringify({
                 accion: 'reservar',
                 servicio: servicio,
+                initData: tg.initData,
+                user: tg.initDataUnsafe?.user || null
             });
 
-            tg.sendData(datos);
-            showToast('✅ ¡Solicitud enviada!', 'success');
+            const mensaje = encodeURIComponent(datos);
+            tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
+            
+            showToast('✅ ¡Solicitud enviada! Pulsa ENTER en el chat', 'success');
 
         } catch (err) {
             console.error('Error:', err);
@@ -255,8 +257,16 @@
             }
 
             try {
-                tg.sendData(JSON.stringify({ accion: 'reservar', servicio, precio }));
-                showToast(`💇 ${servicio} — ¡Reservando!`, 'success');
+                const datos = JSON.stringify({
+                    accion: 'reservar',
+                    servicio,
+                    precio,
+                    initData: tg.initData,
+                    user: tg.initDataUnsafe?.user || null
+                });
+                const mensaje = encodeURIComponent(datos);
+                tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
+                showToast(`💇 ${servicio} — Pulsa ENTER en el chat`, 'success');
             } catch (err) {
                 showToast('❌ Error al enviar.', 'error');
             }
