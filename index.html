@@ -225,11 +225,11 @@
                 initData: tg.initData,
                 user: tg.initDataUnsafe?.user || null
             });
-            console.log('Abriendo enlace:', `https://t.me/${BOT_USERNAME}?start=${mensaje}`);
+
             const mensaje = encodeURIComponent(datos);
             tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
             
-            showToast('✅ ¡Solicitud enviada! Pulsa ENTER en el chat', 'success');
+            showToast('✅ Pulsa ENTER en el chat para confirmar', 'success');
 
         } catch (err) {
             console.error('Error:', err);
@@ -259,8 +259,8 @@
             try {
                 const datos = JSON.stringify({
                     accion: 'reservar',
-                    servicio,
-                    precio,
+                    servicio: servicio,
+                    precio: precio,
                     initData: tg.initData,
                     user: tg.initDataUnsafe?.user || null
                 });
