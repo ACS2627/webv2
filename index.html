@@ -98,7 +98,7 @@
         <div class="hero-badge">★ Premium Studio ★</div>
         <h1>Tu estilo,<span>nuestra pasión</span></h1>
         <p>Transformamos tu look con técnicas de vanguardia en un ambiente exclusivo y relajante.</p>
-        <button class="hero-cta" id="cta-hero" onclick="reservar(this)">
+        <button class="hero-cta" id="cta-hero" onclick="reservar(this, null)">
             <span class="btn-icon"><i class="fa-brands fa-telegram"></i></span>
             <div class="btn-spinner"></div>
             Reservar por Telegram
@@ -165,7 +165,7 @@
         </section>
 
         <div class="cta-final">
-            <button class="hero-cta" id="cta-footer" onclick="reservar(this)">
+            <button class="hero-cta" id="cta-footer" onclick="reservar(this, null)">
                 <span class="btn-icon"><i class="fa-brands fa-telegram"></i></span>
                 <div class="btn-spinner"></div>
                 Pide tu cita ahora
@@ -188,17 +188,12 @@
     <div class="toast" id="toast"></div>
 
     <script>
-    // =============================================
-    // CONFIGURACIÓN — edita solo esta línea
-    // =============================================
-    const WEBHOOK_URL = 'https://numerator-algorithm-chain.ngrok-free.dev/webhook/reserva';
-    const WEBHOOK_SECRET = 'glamour-secret-2026';
-    // =============================================
-
     const tg = window.Telegram?.WebApp;
     if (tg) { tg.ready(); tg.expand(); }
+
     const enTelegram = !!(tg && tg.initData && tg.initData.length > 0);
 
+    // Rate limiting
     const intentos = [];
     function rateLimitOk() {
         const ahora = Date.now();
@@ -208,61 +203,62 @@
         return true;
     }
 
-    function buildPayload(servicio = null) {
-        return {
-            // Secret en el body, no en headers → evita CORS preflight
-            secret: WEBHOOK_SECRET,
-            timestamp: Date.now(),
-            accion: 'reservar',
-            servicio: servicio,
-            user_id:  tg?.initDataUnsafe?.user?.id       ?? null,
-            username: tg?.initDataUnsafe?.user?.username ?? null,
-            nombre:   tg?.initDataUnsafe?.user?.first_name ?? null,
-            init_data: enTelegram ? tg.initData : null,
-        };
-    }
+    function reservar(btn, servicio) {
+        if (!rateLimitOk()) {
+            showToast('⏳ Demasiados intentos. Espera un momento.', 'error');
+            return;
+        }
 
-    async function enviarWebhook(payload) {
-        // SIN headers personalizados → el navegador NO envía OPTIONS preflight
-        const res = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res;
-    }
+        if (!enTelegram) {
+            // Fuera de Telegram: mostrar aviso
+            showToast('⚠️ Abre esta página desde Telegram', 'error');
+            return;
+        }
 
-    async function reservar(btn) {
-        if (!rateLimitOk()) { showToast('⏳ Demasiados intentos. Espera un momento.', 'error'); return; }
         btn.disabled = true;
         btn.classList.add('loading');
+
         try {
-            await enviarWebhook(buildPayload());
-            showToast('✅ ¡Solicitud enviada! El bot te contactará.', 'success');
-            if (enTelegram) setTimeout(() => tg.close(), 1800);
+            // Enviamos datos firmados por Telegram directamente al bot
+            // sin fetch, sin CORS, sin secrets visibles
+            const datos = JSON.stringify({
+                accion: 'reservar',
+                servicio: servicio,
+            });
+
+            tg.sendData(datos);
+            showToast('✅ ¡Solicitud enviada!', 'success');
+
         } catch (err) {
-            console.error('Webhook error:', err);
-            showToast('❌ Error al conectar. Inténtalo de nuevo.', 'error');
-        } finally {
+            console.error('Error:', err);
+            showToast('❌ Error al enviar. Inténtalo de nuevo.', 'error');
             btn.disabled = false;
             btn.classList.remove('loading');
         }
     }
 
+    // Clic en tarjeta de servicio
     document.querySelectorAll('.service-card').forEach(card => {
-        card.addEventListener('click', async function () {
-            if (!rateLimitOk()) { showToast('⏳ Demasiados intentos. Espera un momento.', 'error'); return; }
+        card.addEventListener('click', function () {
+            if (!rateLimitOk()) {
+                showToast('⏳ Demasiados intentos. Espera un momento.', 'error');
+                return;
+            }
             const servicio = this.dataset.service;
             const precio = this.dataset.precio;
             this.style.transform = 'scale(0.97)';
             setTimeout(() => { this.style.transform = ''; }, 200);
+
+            if (!enTelegram) {
+                showToast('⚠️ Abre esta página desde Telegram', 'error');
+                return;
+            }
+
             try {
-                await enviarWebhook(buildPayload(servicio));
-                showToast(`💇 ${servicio} (${precio}€) — ¡Reservando!`, 'success');
-                if (enTelegram) setTimeout(() => tg.close(), 1800);
+                tg.sendData(JSON.stringify({ accion: 'reservar', servicio, precio }));
+                showToast(`💇 ${servicio} — ¡Reservando!`, 'success');
             } catch (err) {
-                showToast('❌ Error al conectar. Inténtalo de nuevo.', 'error');
+                showToast('❌ Error al enviar.', 'error');
             }
         });
     });
