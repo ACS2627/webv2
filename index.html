@@ -192,7 +192,6 @@
     if (tg) { tg.ready(); tg.expand(); }
 
     const enTelegram = !!(tg && tg.initData && tg.initData.length > 0);
-    const BOT_USERNAME = 'Barber_AssistantBot';
 
     // Rate limiting
     const intentos = [];
@@ -211,6 +210,7 @@
         }
 
         if (!enTelegram) {
+            // Fuera de Telegram: mostrar aviso
             showToast('⚠️ Abre esta página desde Telegram', 'error');
             return;
         }
@@ -219,19 +219,15 @@
         btn.classList.add('loading');
 
         try {
+            // Enviamos datos firmados por Telegram directamente al bot
+            // sin fetch, sin CORS, sin secrets visibles
             const datos = JSON.stringify({
                 accion: 'reservar',
                 servicio: servicio,
-                // ✅ Datos firmados por Telegram para validar en n8n
-                initData: tg.initData,
-                user: tg.initDataUnsafe?.user || null
             });
 
-            const mensaje = encodeURIComponent(datos);
-            tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
-            
+            tg.sendData(datos);
             showToast('✅ ¡Solicitud enviada!', 'success');
-            setTimeout(() => tg.close(), 500);
 
         } catch (err) {
             console.error('Error:', err);
@@ -259,16 +255,7 @@
             }
 
             try {
-                const datos = JSON.stringify({
-                    accion: 'reservar',
-                    servicio,
-                    precio,
-                    // ✅ Datos firmados por Telegram para validar en n8n
-                    initData: tg.initData,
-                    user: tg.initDataUnsafe?.user || null
-                });
-                const mensaje = encodeURIComponent(datos);
-                tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=${mensaje}`);
+                tg.sendData(JSON.stringify({ accion: 'reservar', servicio, precio }));
                 showToast(`💇 ${servicio} — ¡Reservando!`, 'success');
             } catch (err) {
                 showToast('❌ Error al enviar.', 'error');
