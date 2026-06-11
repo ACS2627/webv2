@@ -73,8 +73,7 @@
             const userName = user ? user.first_name : 'Usuario Dev';
 
             // 3. LA URL DE TU WEBHOOK EN N8N (Debe ser un webhook de tipo POST)
-            const n8nWebhookUrl = 'http://localhost:5678/webhook-test/recibir-datos-webapp';
-
+            const n8nWebhookUrl = 'https://numerator-algorithm-chain.ngrok-free.dev/webhook/recibir-datos-webapp';
             // Damos feedback visual al usuario
             tg.MainButton.text = "Enviando...";
             tg.MainButton.show();
