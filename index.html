@@ -1,119 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Telegram WebApp Test</title>
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      text-align: center;
-      padding: 30px;
-    }
-
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #2ea6ff;
-      color: white;
-      margin-top: 20px;
-    }
-
-    button:disabled {
-      background: gray;
-      cursor: not-allowed;
-    }
-
-    .box {
-      margin-top: 20px;
-      padding: 15px;
-      background: #222;
-      border-radius: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Barbería Profesional - Cortes de cabello, diseño de barba y cuidado masculino premium. Reserva tu cita.">
+    <title>The Shave & Co. | Barbería Profesional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
 
-  <h2>🚀 WebApp Telegram Test</h2>
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#" class="logo">THE SHAVE & CO.</a>
+            <button class="nav-toggle" aria-label="Abrir menú">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+                    <li><a href="#servicios" class="nav-link">Servicios</a></li>
+                    <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
+                    <li><a href="#galeria" class="nav-link">Galería</a></li>
+                    <li><a href="#testimonios" class="nav-link">Opiniones</a></li>
+                    <li><a href="#contacto" class="nav-link nav-btn">Reservar Cita</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <div class="box">
-    <p id="status">Inicializando...</p>
-    <p id="attempts">Intentos: 0 / 3</p>
-  </div>
+    <main>
+        <section id="inicio" class="hero">
+            <div class="hero-content">
+                <p class="hero-subtitle">Estilo, Tradición y Clase</p>
+                <h1 class="hero-title">El Arte del Cuidado Masculino</h1>
+                <p class="hero-text">No es solo un corte, es una experiencia de autor diseñada para el hombre moderno.</p>
+                <a href="#contacto" class="btn btn-primary">Reserva tu Experiencia</a>
+            </div>
+        </section>
 
-  <button id="startBtn">Iniciar flujo en n8n</button>
+        <section id="servicios" class="services section-padding">
+            <div class="container">
+                <h2 class="section-title">Nuestros Servicios</h2>
+                <p class="section-subtitle">Precisión en cada detalle</p>
+                
+                <div class="services-grid">
+                    <article class="service-card">
+                        <div class="service-icon"><i class="fa-solid fa-scissors"></i></div>
+                        <h3>Corte de Autor</h3>
+                        <p class="service-price">$25</p>
+                        <p>Asesoramiento de visagismo, lavado premium y peinado con productos de alta gama.</p>
+                    </article>
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+                    <article class="service-card">
+                        <div class="service-icon"><i class="fa-solid fa-razor"></i></div>
+                        <h3>Ritual de Barba</h3>
+                        <p class="service-price">$20</p>
+                        <p>Afeitado clásico o perfilado con toallas calientes, aceites esenciales y masaje.</p>
+                    </article>
 
-    const user = tg.initDataUnsafe?.user;
-    const userId = user?.id || "guest";
+                    <article class="service-card">
+                        <div class="service-icon"><i class="fa-solid fa-mustache"></i></div>
+                        <h3>Combo Premium</h3>
+                        <p class="service-price">$40</p>
+                        <p>La experiencia completa: Corte de autor + Ritual de barba con hidratación profunda.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
 
-    const storageKey = "attempts_" + userId;
+        <section id="nosotros" class="about section-padding bg-light">
+            <div class="container about-container">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=80" alt="Barbero trabajando">
+                </div>
+                <div class="about-content">
+                    <h2 class="section-title left">Maestros Barberos</h2>
+                    <p class="about-lead">Fundada en el corazón de la elegancia, rescatamos el ritual clásico de la barbería fusionándolo con tendencias contemporáneas.</p>
+                    <p>Nuestro equipo de profesionales cuenta con años de trayectoria internacional. Cada cliente recibe una atención milimétrica y personalizada, garantizando una desconexión total del caos diario.</p>
+                    <div class="about-features">
+                        <div class="feature"><i class="fa-solid fa-check"></i> Productos Orgánicos</div>
+                        <div class="feature"><i class="fa-solid fa-check"></i> Bebida de Cortesía</div>
+                        <div class="feature"><i class="fa-solid fa-check"></i> Wi-Fi de Alta Velocidad</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    let attempts = parseInt(localStorage.getItem(storageKey)) || 0;
+        <section id="galeria" class="gallery section-padding">
+            <div class="container">
+                <h2 class="section-title">Cortes con Identidad</h2>
+                <p class="section-subtitle">Galardonados por nuestra precisión</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=500&q=80" alt="Estilo 1"></div>
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=500&q=80" alt="Estilo 2"></div>
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=500&q=80" alt="Estilo 3"></div>
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1512864084360-7c0c4d0a0845?auto=format&fit=crop&w=500&q=80" alt="Estilo 4"></div>
+                </div>
+            </div>
+        </section>
 
-    const statusEl = document.getElementById("status");
-    const attemptsEl = document.getElementById("attempts");
-    const btn = document.getElementById("startBtn");
+        <section id="testimonios" class="testimonials section-padding bg-light">
+            <div class="container">
+                <h2 class="section-title">Lo que Dicen de Nosotros</h2>
+                <div class="testimonials-grid">
+                    <blockquote class="testimonial-card">
+                        <p class="quote">"La atención al detalle es absurda. El ritual de toallas calientes te transporta a otra dimensión. Mi barbería de confianza desde el primer día."</p>
+                        <cite class="author">- Carlos Mendoza</cite>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    </blockquote>
+                    <blockquote class="testimonial-card">
+                        <p class="quote">"Excelente ambiente, música de primera y profesionales que realmente entienden de visagismo. Vale cada centavo."</p>
+                        <cite class="author">- Javier Ortiz</cite>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
 
-    function updateUI() {
-      attemptsEl.innerText = `Intentos: ${attempts} / 3`;
+        <section id="contacto" class="contact section-padding">
+            <div class="container contact-container">
+                <div class="contact-form-wrapper">
+                    <h3>Reserva Online</h3>
+                    <p>Selecciona tu horario y asegura tu espacio con nuestros maestros.</p>
+                    <form id="booking-form" class="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" required placeholder="Nombre Completo">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" required placeholder="Correo Electrónico">
+                        </div>
+                        <div class="form-row">
+                            <input type="date" id="date" required>
+                            <select id="service" required>
+                                <option value="" disabled selected>Selecciona Servicio</option>
+                                <option value="corte">Corte de Autor ($25)</option>
+                                <option value="barba">Ritual de Barba ($20)</option>
+                                <option value="combo">Combo Premium ($40)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width">Confirmar Reserva</button>
+                    </form>
+                    <div id="form-response" class="form-message"></div>
+                </div>
+                
+                <div class="contact-info">
+                    <h3>¿Dónde Estamos?</h3>
+                    <p class="info-item"><i class="fa-solid fa-location-dot"></i> Av. de la Elegancia 404, Madrid, España</p>
+                    <p class="info-item"><i class="fa-solid fa-phone"></i> +34 912 345 678</p>
+                    <p class="info-item"><i class="fa-solid fa-clock"></i> Lun - Sáb: 10:00 - 21:00 | Dom: Cerrado</p>
+                    <div class="map-placeholder">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12149.25595995493!2d-3.703790!3d40.416775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd42287d363d6b99%3A0x8896a246830dfa21!2sMadrid!5e0!3m2!1ses!2ses!4v1700000000000!5m2!1ses!2ses" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-      if (attempts >= 3) {
-        btn.disabled = true;
-        statusEl.innerText = "❌ Límite de intentos alcanzado";
-      } else {
-        statusEl.innerText = `👤 Usuario: ${user?.first_name || "desconocido"}`;
-      }
-    }
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 The Shave & Co. Todos los derechos reservados.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </footer>
 
-    updateUI();
-
-    btn.addEventListener("click", async () => {
-      if (attempts >= 3) return;
-
-      attempts++;
-      localStorage.setItem(storageKey, attempts);
-
-      updateUI();
-
-      try {
-        const res = await fetch("https://numerator-algorithm-chain.ngrok-free.dev/webhook/recibir-datos-webapp", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            user: user,
-            initData: tg.initData,
-            attempt: attempts
-          })
-        });
-
-        if (res.ok) {
-          statusEl.innerText = "✅ Enviado a n8n correctamente";
-        } else {
-          statusEl.innerText = "⚠️ Error enviando a n8n";
-        }
-
-      } catch (err) {
-        console.error(err);
-        statusEl.innerText = "❌ Error de conexión";
-      }
-    });
-  </script>
-
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
